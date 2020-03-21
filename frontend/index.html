@@ -44,8 +44,23 @@
     <!-- Vue root component -->
     <div id="app">
         <h1>{{title}}</h1>
-    </div>
 
+        <!-- Content Area -->
+        <div>
+            <router-view></router-view>
+        </div>
+
+        <!-- Navigation area -->
+        <div>
+            <!-- use router-link component for navigation. -->
+            <!-- specify the link by passing the `to` prop. -->
+            <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
+            <router-link to="/collect">Collect</router-link>
+            <router-link to="/graphs">Graphs</router-link>
+        </div>
+        <!-- end of adapted (Router) -->
+
+    </div>
     <!-- Bootstrap JavaScript-->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
