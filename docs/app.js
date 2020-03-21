@@ -78,7 +78,7 @@ const Graphs = Vue.component('graphs', {
                     y: 0.95
                 }
             };
-            Plotly.newPlot(CONTAINER, data, layout);
+            Plotly.newPlot(CONTAINER, data, layout, {responsive: true});
         }
     }
 });
