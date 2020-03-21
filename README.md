@@ -1,7 +1,7 @@
 This is a project for #wirvsvirus hackathon
 
 # To host the application locally
-$ cd frontend
+$ cd docs
 
 $ python -m http.server 7800
 
