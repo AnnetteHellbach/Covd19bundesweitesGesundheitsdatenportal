@@ -14,7 +14,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async event => {
   console.log(event);
-  const { zipCode, age, preExistingConditions, temperature, dryCaught, sniff, bodyache, headache} = event;
+  const { zipCode, age, preExistingConditions, feeling, temperature, dryCough, cold, limbPain, headache, throatItches, nauseous} = event;
   const params = {
     TableName: "events", // The name of your DynamoDB table
     Item: { // Creating an Item with a unique id and with the passed title
@@ -24,10 +24,14 @@ exports.handler = async event => {
       age: age,
       preExistingConditions: preExistingConditions,
       temperature : temperature,
-      dryCaught: dryCaught,
-      sniff: sniff,
-      bodyache: bodyache,
-      headache: headache
+      dryCough: dryCough,
+      cold: cold,
+      limbPain: limbPain,
+      headache: headache,
+      throatItches: throatItches,
+      nauseous: nauseous,
+      feeling: feeling
+      
     }
   };
   try {

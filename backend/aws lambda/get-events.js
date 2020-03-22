@@ -13,16 +13,19 @@ exports.handler = async event => {
     
     data.Items.forEach( (item) => {
         var s = [];
-        s.push ({sniff: item.sniff});
-        s.push ({bodyache: item.bodyache});
+        s.push ({cold: item.cold});
         s.push ({headache: item.headache});
-        s.push ({dryCaught: item.dryCaught});
+        s.push ({dryCough: item.dryCough});
         s.push ({temperature: item.temperature});
+        s.push ({limbPain: item.limbPain});
+        s.push ({throatItches: item.throatItches});
+        s.push ({nauseous: item.nauseous});
 
         var a = {
           id : item.id,
           zipCode: item.zipCode,
           age: item.age,
+          feeling: item.feeling,
           preExistingConditions: item.preExistingConditions,
           timestamp: item.timestamp,
           symptoms: s,
