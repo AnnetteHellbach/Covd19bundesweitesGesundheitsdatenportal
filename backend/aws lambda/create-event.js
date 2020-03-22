@@ -13,18 +13,21 @@ const buildTimestamp = () => new Date().toISOString().
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async event => {
-  const { zipCode, temperature, dryCaught, sniff, bodyache, headache } = JSON.parse(event.body);
+  console.log(event);
+  const { zipCode, age, preExistingConditions, temperature, dryCaught, sniff, bodyache, headache} = event;
   const params = {
     TableName: "events", // The name of your DynamoDB table
     Item: { // Creating an Item with a unique id and with the passed title
       id: generateUUID(),
       timestamp: buildTimestamp(),
       zipCode: zipCode,
-        temperature : temperature,
-        dryCaught: dryCaught,
-        sniff: sniff,
-        bodyache: bodyache,
-        headache: headache
+      age: age,
+      preExistingConditions: preExistingConditions,
+      temperature : temperature,
+      dryCaught: dryCaught,
+      sniff: sniff,
+      bodyache: bodyache,
+      headache: headache
     }
   };
   try {

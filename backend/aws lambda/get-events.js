@@ -22,6 +22,8 @@ exports.handler = async event => {
         var a = {
           id : item.id,
           zipCode: item.zipCode,
+          age: item.age,
+          preExistingConditions: item.preExistingConditions,
           timestamp: item.timestamp,
           symptoms: s,
         }
