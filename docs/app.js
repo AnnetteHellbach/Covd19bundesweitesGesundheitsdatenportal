@@ -74,7 +74,6 @@ const Graphs = Vue.component('graphs', {
             var data = [];
             //create a trace for all symptoms
             for (const key in symptoms) {
-                console.log(key);
                 if (symptoms.hasOwnProperty(key)) {
                     var trace = {
                         x: dates,
