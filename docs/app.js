@@ -217,7 +217,11 @@ var app = new Vue({
             //     alert(err); // Failed to fetch
             // }
             fetch('https://p8qa1235xe.execute-api.eu-central-1.amazonaws.com/test/events', {
-                    mode: 'no-cors'
+                    mode: 'no-cors',
+                    headers: {
+                        'Access-Control-Allow-Origin':'*',
+                        'Content-Type': 'application/json'
+                      },
                 })
                 .then((response) => {
                     console.log(response);
