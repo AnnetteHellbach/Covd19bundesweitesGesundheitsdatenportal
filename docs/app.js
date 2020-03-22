@@ -24,26 +24,31 @@ const Graphs = Vue.component('graphs', {
         };
 
         app.entries.forEach(entry => {
-            dates.push(entry.date);
+            dates.push(entry.timestamp);
             var entry_symptom_names = [];
             var entry_symptom_values = [];
 
             entry.symptoms.forEach(symptom => {
-                entry_symptom_names.push(Object.keys(symptom));
+                entry_symptom_names.push(Object.keys(symptom)[0]);
                 entry_symptom_values.push(Object.values(symptom)[0]);
             });
-
+            
             // create elements for the two data collections boolean_symptoms and non_boolean_symptoms with symptom name and corresponding value
             for (let index = 0; index < entry.symptoms.length; index++) {
-                if (entry_symptom_names[index] in non_boolean_symptoms) {
-                    // set the actual value here
-                    non_boolean_symptoms.temperature.push(entry_symptom_values[index]);
-                } else {
-                    // replace the true values with the symptom name and false with undefined
-                    if (entry_symptom_values[index]) {
-                        boolean_symptoms[entry_symptom_names[index]].push(entry_symptom_names[index][0]);
-                    } else if (!entry_symptom_values[index]) {
-                        boolean_symptoms[entry_symptom_names[index]].push(undefined);
+                // don't add undefined values
+                if (entry_symptom_names[index]) {
+                    if (entry_symptom_names[index] in non_boolean_symptoms) {
+                        // don't use 0 degrees it does not make sense
+                        if (entry_symptom_values[index] != 0) {
+                            non_boolean_symptoms.temperature.push(entry_symptom_values[index]);
+                        }
+                    } else {
+                        // replace the true values with the symptom name and false with undefined
+                        if (entry_symptom_values[index]) {
+                            boolean_symptoms[entry_symptom_names[index]].push(entry_symptom_names[index]);
+                        } else if (!entry_symptom_values[index]) {
+                            boolean_symptoms[entry_symptom_names[index]].push(undefined);
+                        }
                     }
                 }
             }
@@ -69,22 +74,19 @@ const Graphs = Vue.component('graphs', {
             var data = [];
             //create a trace for all symptoms
             for (const key in symptoms) {
+                console.log(key);
                 if (symptoms.hasOwnProperty(key)) {
                     var trace = {
                         x: dates,
                         y: symptoms[key],
-                        type: 'markers',
+                        mode: 'markers',
                         name: key
                     };
                     data.push(trace);
                 }
             }
             var layout = {
-                showlegend: true,
-                legend: {
-                    x: 0.7,
-                    y: 0.95
-                }
+                showlegend: true
             };
             Plotly.newPlot(CONTAINER, data, layout, {
                 responsive: true
@@ -124,10 +126,10 @@ var app = new Vue({
     router,
     el: '#app', //id of html element in index.html
     data: {
-        symptomnames: ['sniff', 'bodyache', 'headache', 'dryCaught', 'temperature'],
+        symptomnames: ["cold", "headache", "dryCough", "temperature", "limbPain", "throatItches", "nauseous"],
         entries: [{
                 "id": "42857436740651e7cddbf0c2ba1c585d",
-                "date": "21.03.2020",
+                "timestamp": "21.03.2020",
                 "zipCode": "90123",
                 "symptoms": [{
                         "sniff": false
@@ -147,7 +149,7 @@ var app = new Vue({
                 ]
             }, {
                 "id": "42857436740651e7cddbf0c2ba1c585d",
-                "date": "21.03.2020",
+                "timestamp": "21.03.2020",
                 "zipCode": "90123",
                 "symptoms": [{
                         "sniff": false
@@ -167,7 +169,7 @@ var app = new Vue({
                 ]
             }, {
                 "id": "42857436740651e7cddbf0c2ba1c585d",
-                "date": "20.03.2020",
+                "timestamp": "20.03.2020",
                 "zipCode": "90123",
                 "symptoms": [{
                         "sniff": true
@@ -188,7 +190,7 @@ var app = new Vue({
             },
             {
                 "id": "42857436740651e7cddbf0c2ba1c585d",
-                "date": "19.03.2020",
+                "timestamp": "19.03.2020",
                 "zipCode": "90123",
                 "symptoms": [{
                         "sniff": false
@@ -209,27 +211,13 @@ var app = new Vue({
             }
         ]
     },
-    methods: {
-        getEntries() {
-            // try {
-            //     fetch('https://p8qa1235xe.execute-api.eu-central-1.amazonaws.com/test/events');
-            // } catch (err) {
-            //     alert(err); // Failed to fetch
-            // }
-            fetch('https://p8qa1235xe.execute-api.eu-central-1.amazonaws.com/test/events', {
-                    mode: 'no-cors',
-                    headers: {
-                        'Access-Control-Allow-Origin':'*',
-                        'Content-Type': 'application/json'
-                      },
-                })
-                .then((response) => {
-                    console.log(response);
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log(data);
-                });
-        }
+    created: function () {
+        fetch('https://p8qa1235xe.execute-api.eu-central-1.amazonaws.com/test/events')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                app.entries = data.body;
+            });
     }
 });
