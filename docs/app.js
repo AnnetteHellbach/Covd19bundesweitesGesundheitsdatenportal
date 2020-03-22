@@ -5,11 +5,16 @@ const Collect = Vue.component('collect', {
 
 // Graphs View
 const Graphs = Vue.component('graphs', {
-    template: "<div><template v-if='entries.length === 0'><p>No graphs are available yet</p></template><template v-else><div><div id='graph_boolean' style='width:100%;'></div><div id='graph_numbers' style='width:100%;'></div></div></template></div>",
+    template: "<div><button v-on:click='getEntries()'>Click</button><template v-if='entries.length === 0'><p>No graphs are available yet</p></template><template v-else><div><div id='graph_boolean' style='width:100%;'></div><div id='graph_numbers' style='width:100%;'></div></div></template></div>",
     data: function () {
         return {
             entries: app.entries
         };
+    },
+    methods: {
+        getEntries: function () {
+            app.getEntries();
+        }
     },
     mounted: function () {
         var dates = [];
@@ -81,7 +86,9 @@ const Graphs = Vue.component('graphs', {
                     y: 0.95
                 }
             };
-            Plotly.newPlot(CONTAINER, data, layout, {responsive: true});
+            Plotly.newPlot(CONTAINER, data, layout, {
+                responsive: true
+            });
         }
     }
 });
@@ -201,5 +208,24 @@ var app = new Vue({
                 ]
             }
         ]
+    },
+    methods: {
+        getEntries() {
+            // try {
+            //     fetch('https://p8qa1235xe.execute-api.eu-central-1.amazonaws.com/test/events');
+            // } catch (err) {
+            //     alert(err); // Failed to fetch
+            // }
+            fetch('https://p8qa1235xe.execute-api.eu-central-1.amazonaws.com/test/events', {
+                    mode: 'no-cors'
+                })
+                .then((response) => {
+                    console.log(response);
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                });
+        }
     }
 });
